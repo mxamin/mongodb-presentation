@@ -1,0 +1,795 @@
+<!--
+Parspooyesh - MongoDB Introduction
+Author: Amin Solhizadeh <a.solhizadeh@parspooyesh.com>
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--This one seems to work all the time, but really small on ipad-->
+    <!--<meta name="viewport" content="initial-scale=0.4">-->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" media="all" href="theme/css/default.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+    <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+    <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+  </head>
+  <body style="opacity: 0">
+    <slides class="layout-widescreen">
+      <slide class="logoslide nobackground">
+		<article class="flexbox vcenter">
+		  <span><img src="images/mongo_logo.png"></span>
+		</article>
+      </slide>
+
+      <slide class="title-slide segue nobackground">
+		<aside class="gdbar"><img src="images/mongo_icon.png"></aside>
+		<!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+		<hgroup class="auto-fadein">
+		  <h1 data-config-title><!-- populated from slide_config.json --></h1>
+		  <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+		  <p data-config-presenter><!-- populated from slide_config.json --></p>
+		</hgroup>
+      </slide>
+
+      <slide class="segue dark nobackground">
+		<aside class="gdbar"><img src="images/mongo_icon.png"></aside>
+		<hgroup class="auto-fadein">
+		  <h2>Overview</h2>
+		</hgroup>
+      </slide>
+      
+      <slide>
+		<hgroup>
+		  <h2>Overview</h2>
+		</hgroup>
+		<article>
+		  <p>Definitions:</p>
+		  <ul class="build">
+			<li>
+			  <b>Database:</b> Physical container for collections
+			</li>
+			<li>
+			  <b>Collection:</b> Group of MongoDB documents
+			</li>
+			<li>
+			  <b>Document:</b> Set of key-value pairs
+			</li>
+		  </ul>
+		</article>
+      </slide>
+
+      <slide>
+		<hgroup>
+		  <h2>RDBMS vs. MongoDB</h2>
+		</hgroup>
+		<article>
+		  <table>
+			<tr>
+			  <th>RDBMS</th><th>MongoDB</th>
+			</tr>
+			<tr>
+			  <td>Database</td><td>Database</td>
+			</tr>
+			<tr>
+			  <td>Table</td><td>Collection</td>
+			</tr>
+			<tr>
+			  <td>Tuple/Row</td><td>Document</td>
+			</tr>
+			<tr>
+			  <td>Column</td><td>Field</td>
+			</tr>
+			<tr>
+			  <td>Table Join</td><td>Embedded Documents</td>
+			</tr>
+			<tr>
+			  <td>Primary Key</td><td>Primary Key ('_id': provided by MongoDB)</td>
+			</tr>
+		  </table>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Supported Types</h2>
+		</hgroup>
+		<article>
+		  <ul class="build">
+			<li>String</li>
+			<li>Integer</li>
+			<li>Boolean</li>
+			<li>Double</li>
+			<li>Arrays</li>
+			<li>Date</li>
+			<li>ObjectID</li>
+			<li>...</li>
+		  </ul>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Document</h2>
+		</hgroup>
+		<article class="smaller">
+		  <p>Sample Document:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+{
+    _id: ObjectId("5833ee6aa4e0160a323db3ab")
+    title: 'MongoDB Overview',
+    description: 'MongoDB is no sql database',
+    tags: ['mongodb', 'database', 'NoSQL'],
+    likes: 100, 
+    comments: [
+        {
+            user: 'user1',
+            message: 'My first comment',
+            dateCreated: new Date(2011,1,20,2,15),
+            like: 0 
+        },
+        {
+            user:'user2',
+            message: 'My second comments',
+            dateCreated: new Date(2011,1,25,7,45),
+            like: 5
+        }
+    ]
+}
+		  </pre>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Advantages of MongoDB over RDBMS</h2>
+		</hgroup>
+		<article>
+		  <ul class="build">
+			<li>
+			  <b>Schemaless:</b> Each collection can hold documents with different schems
+			</li>
+			<li>
+			  <b>Deep Query:</b> Supports dynamic queries (document-based query language)
+			</li>
+			<li>
+			  <b>Ease of Scale-Out:</b> Set of key-value pairs
+			</li>
+			<li>
+			  <b>No Complex Joins:</b> Uses embedded documents
+			</li>
+			<li>
+			  ...
+			</li>
+		  </ul>
+		</article>
+	  </slide>
+
+      <slide class="segue dark nobackground">
+		<aside class="gdbar"><img src="images/mongo_icon.png"></aside>
+		<hgroup class="auto-fadein">
+		  <h2>How to Interact with MongoDB</h2>
+		  <h3>MongoDB Command-Line</h3>
+		</hgroup>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Install MongoDB Community Edition on Debian</h2>
+		</hgroup>
+		<article>
+		  <p>Packages:</p>
+		  <ul class="build">
+			<li>mongodb-org</li>
+			<li>mongodb-org-server</li>
+			<li>mongodb-org-mongos</li>
+			<li>mongodb-org-shell</li>
+			<li>mongodb-org-tools</li>
+		  </ul>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Install MongoDB Community Edition on Debian</h2>
+		</hgroup>
+		<article>
+		  <p>Import the public key used by the package management system</p>
+		  <pre class="prettyprint" data-lang="shell">
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+		  </pre>
+
+		  <p>Create a /etc/apt/sources.list.d/mongodb-org-3.2.list file for MongoDB</p>
+		  <pre class="prettyprint" data-lang="shell">
+echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.2 main" | \
+sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+		  </pre>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Install MongoDB Community Edition on Debian</h2>
+		</hgroup>
+		<article>
+		  <p>Reload local package database</p>
+		  <pre data-lang="shell">
+sudo apt-get update
+		  </pre>
+
+		  <p>Install the MongoDB packages</p>
+		  <pre data-lang="shell">
+sudo apt-get install -y mongodb-org
+		  </pre>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB GUI Management Tools:</h2>
+		</hgroup>
+		<article>
+		  <p>GUI Tools:</p>
+		  <ul class="build">
+			<li>
+			  <img src="images/robomongo_logo.png" width="10%" class="reflect" alt="robomongo_logo" title="Robomongo"><br>
+			  Robomongo
+			</li>
+			<li>MongoDB Compass</li>
+			<li>MongoDB Atlas</li>
+			<li>Fang of Mongo</li>
+			<li>UMongo</li>
+		  </ul>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Commands</h2>
+		</hgroup>
+		<article>
+		  <p>Enter MongoDB command-line:</p>
+		  <pre class="prettyprint" data-lang="shell">
+$ mongo
+		  </pre>
+
+		  <p>List all database(s):</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> show dbs
+PLP              1.953GB
+hamshahri        3.952GB
+local            0.078GB
+tabnak           0.078GB
+tags            13.947GB
+tzdemo           0.078GB
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>IBSng Database</h2>
+		</hgroup>
+		<article>
+		  <p>IBSng:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> show dbs
+IBSng  5.951GB
+local  0.078GB
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Commands</h2>
+		</hgroup>
+		<article>
+		  <p>Switch to DB:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> use mydb
+switched to db mydb
+		  </pre>
+
+		  <p>Insert document:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.movie.insert({"title": "Hero", "year": 2002})
+WriteResult({ "nInserted" : 1 })
+		  </pre>
+
+		  <p>List document(s):</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.movie.find()
+{ "_id" : ObjectId("58340b2aad5a408446063979"), "title" : "Hero", "year" : 2002 }
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Commands</h2>
+		</hgroup>
+		<article>
+		  <p>Create collection:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.createCollection("newcollection")
+{ "ok" : 1 }
+		  </pre>
+
+		  <p>List collections:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> show collections
+movies
+newcollection
+system.indexes
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>MongoDB Commands</h2>
+		</hgroup>
+		<article>
+		  <p>Drop collection:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.newcollection.drop()
+true
+		  </pre>
+
+		  <p>Drop database:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.dropDatabase()
+{ "dropped" : "mydb", "ok" : 1 }
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>IBSng Connection Log Tables (PostgreSQL)</h2>
+		</hgroup>
+		<article>
+		  <p>IBSng:</p>
+		  <pre class="prettyprint" data-lang="SQL">
+connection_log
+connection_log_partial_data
+connection_log_details
+connection_log_charge_rule_details
+connection_log_charge_rule_details_partial_data
+connection_log_internet_details
+connection_log_internet_details_partial_data
+connection_log_voip_details
+connection_log_voip_details_partial_data
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>IBSng Snapshot Tables (PostgreSQL)</h2>
+		</hgroup>
+		<article>
+		  <p>IBSng:</p>
+		  <pre class="prettyprint" data-lang="SQL">
+internet_onlines_snapshot
+internet_bw_snapshot
+group_internet_bw_snapshot
+isp_internet_bw_snapshot
+ras_internet_bw_snapshot
+voip_onlines_snapshot
+voip_providers_snapshot
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>IBSng Collections</h2>
+		</hgroup>
+		<article class="smaller">
+		  <p>IBSng:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> show collections
+connection_log
+connection_log_partial_data
+group_internet_bw_snapshot_day
+group_internet_bw_snapshot_hour
+group_internet_bw_snapshot_minute
+internet_onlines_snapshot_day
+internet_onlines_snapshot_hour
+internet_onlines_snapshot_minute
+isp_internet_bw_snapshot_day
+isp_internet_bw_snapshot_hour
+isp_internet_bw_snapshot_minute
+ras_internet_bw_snapshot_day
+ras_internet_bw_snapshot_hour
+ras_internet_bw_snapshot_minute
+user_internet_bw_snapshot_day
+user_internet_bw_snapshot_hour
+user_internet_bw_snapshot_minute
+		  </pre>
+		</article>
+	  </slide>
+
+      <slide class="segue dark nobackground">
+		<aside class="gdbar"><img src="images/mongo_icon.png"></aside>
+		<hgroup class="auto-fadein">
+		  <h2>MongoDB Query</h2>
+		  <h3>Insert, Find, Update, ...</h3>
+		</hgroup>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Insert Query</h2>
+		</hgroup>
+		<article class="smaller">
+		  <p>Insert multiple documents:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+>db.post.insert([
+   {
+      title: 'MongoDB Overview', 
+      description: 'MongoDB is no sql database',
+      tags: ['mongodb', 'NoSQL'],
+      likes: 100
+   },
+   {
+      title: 'NoSQL Database', 
+      description: 'NoSQL database does not have tables',
+      tags: ['mongodb', 'database', 'NoSQL'],
+      likes: 20,
+      comments: [
+         {
+            user:'user1',
+            message: 'My first comment',
+            dateCreated: new Date(2013,11,10,2,35),
+            like: 0
+         }
+      ]
+   }
+])
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Find Query</h2>
+		</hgroup>
+		<article>
+		  <p>Template:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find(SELECTION_CRITERIA)
+...			
+		  </pre>
+
+		  <p>Equality:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"title": "MongoDB Overview"})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Find Query</h2>
+		</hgroup>
+		<article>
+		  <p>Less than:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"likes": {$lt: 50}})
+...
+		  </pre>
+
+		  <p>Less than or equal:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"likes": {$lte: 50}})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Find Query</h2>
+		</hgroup>
+		<article>
+		  <p>Greater than:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"likes": {$gt: 50}})
+...
+		  </pre>
+
+		  <p>Greater than or equal:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"likes": {$gte: 50}})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Find Query</h2>
+		</hgroup>
+		<article>
+		  <p>Not equal:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({"likes": {$ne: 50}})
+...
+		  </pre>
+
+		  <p>OR:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({$or: [{"likes": {$gt: 50}},{"title": "MongoDB Overview"}]})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Find Query</h2>
+		</hgroup>
+		<article>
+		  <p>AND-OR:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.find({
+    "likes": {$gt: 10},
+    $or: [{"tags": {$in: ["NoSQL", "mongodb"]}}, {"title": "MongoDB Overview"}]
+})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Update Query</h2>
+		</hgroup>
+		<article>
+		  <p>Template:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Update Query</h2>
+		</hgroup>
+		<article>
+		  <p>Update ONE document (if exists):</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.update(
+    {'title': 'MongoDB Overview'},
+    {$set: {'title': 'New MongoDB Tutorial'}}
+)
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Update Query</h2>
+		</hgroup>
+		<article>
+		  <p>Update multiple documents:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.update(
+    {'title': 'MongoDB Overview'},
+    {$set: {'title': 'New MongoDB Tutorial'}}
+    {multi: true}
+)
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Remove Query</h2>
+		</hgroup>
+		<article>
+		  <p>Template:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)
+> db.COLLECTION_NAME.remove(DELETION_CRITERIA, 1)
+		  </pre>
+
+		  <p>Examples:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.remove({'title': 'MongoDB Overview'})
+> db.mycol.remove()
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Improve Find Query!</h2>
+		</hgroup>
+		<article>
+		  <p>Specify which fields to list:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find({}, {KEY:1}
+...
+		  </pre>
+
+		  <p>Limit output:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find().limit(NUMBER)
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Improve Find Query!</h2>
+		</hgroup>
+		<article>
+		  <p>Skip documents:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find().skip(NUMBER)
+...
+		  </pre>
+
+		  <p>Sort output (1: ASC, -1: DESC):</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find().sort({KEY: 1, KEY: -1})
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Improve Find Query!</h2>
+		</hgroup>
+		<article>		  
+		  <p>Use limit and skip together:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find().limit(NUMBER).skip(NUMBER)
+...
+		  </pre>
+
+		  <p>Prettify output:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.find().pretty()
+...
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Indexing</h2>
+		</hgroup>
+		<article>		  
+		  <p>Template:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.ensureIndex({KEY: 1})
+...
+		  </pre>
+
+		  <p>Examples:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.ensureIndex({"title": 1})
+> db.mycol.ensureIndex({"title": 1, "likes": -1})
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Aggregation</h2>
+		</hgroup>
+		<article>		  
+		  <p>Template:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.COLLECTION_NAME.aggregate(AGGREGATE_OPERATION)
+...
+		  </pre>
+
+		  <p>Example:</p>
+		  <pre class="prettyprint" data-lang="mongo">
+> db.mycol.aggregate([{$group: {_id: "$by_user", num_post: {$sum : 1}}}])
+		  </pre>
+		  
+		  <p>The same query in SQL:</p>
+		  <pre class="prettyprint" data-lang="SQL">
+SELECT by_user, COUNT(*) AS num_post FROM mycol GROUP BY by_user
+		  </pre>
+		</article>
+	  </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Aggregation</h2>
+		</hgroup>
+		<article>
+		  <p>Aggregation Expressions:</p>
+		  <ul class="build">
+			<li>$sum</li>
+			<li>$avg</li>
+			<li>$min</li>
+			<li>$max</li>
+			<li>$first</li>
+			<li>$last</li>
+			<li>...</li>
+		  </ul>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Aggregation</h2>
+		</hgroup>
+		<article>
+		  <p>Aggregation Frameworks:</p>
+		  <ul class="build">
+			<li>$group</li>
+			<li>$match</li>
+			<li>$sort</li>
+			<li>$skip</li>
+			<li>...</li>
+		  </ul>
+		</article>
+      </slide>
+
+	  <slide>
+		<hgroup>
+		  <h2>Maintenance</h2>
+		</hgroup>
+		<article>
+		  <p>Backup and Restore:</p>
+		  <pre class="prettyprint" data-lang="shell">
+$ mongodump
+$ mongorestore
+		  </pre>
+		</article>
+      </slide>
+
+      <slide class="thank-you-slide segue nobackground">
+		<aside class="gdbar right"><img src="images/mongo_icon.png"></aside>
+		<article class="flexbox vleft auto-fadein">
+		  <h2>Thank You</h2>
+		</article>
+		<p class="auto-fadein" data-config-contact>
+		  <!-- populated from slide_config.json -->
+		</p>
+      </slide>
+      
+      <slide class="backdrop"></slide>
+    </slides>
+
+    <script>
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+    
+    <!--[if IE]>
+	<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+	<script>CFInstall.check({mode: 'overlay'});</script>
+    <![endif]-->
+  </body>
+</html>
